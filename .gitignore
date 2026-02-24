@@ -16,6 +16,8 @@
 # next.js
 /.next/
 /out/
+/.wwebjs_cache/
+/.wwebjs_auth/
 
 # production
 /build
