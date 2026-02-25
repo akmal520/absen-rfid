@@ -21,9 +21,11 @@ export default function WhatsAppSettings() {
 
     useEffect(() => {
         checkStatus();
-        const interval = setInterval(checkStatus, 5000); // Polling tiap 5 detik
+        const interval = setInterval(() => {
+            if (!status.isReady) checkStatus();
+        }, 5000); // Polling tiap 5 detik
         return () => clearInterval(interval);
-    }, []);
+    }, [status.isReady]);
 
     return (
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 max-w-md">

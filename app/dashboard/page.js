@@ -31,6 +31,7 @@ export default function DashboardPage() {
         fetchData();
         fetchSiswa();
         getSettings();
+        fetch("/api/whatsapp/status").catch(() => console.log("WA Init fail"));
     }, []);
 
     const fetchData = async () => {
