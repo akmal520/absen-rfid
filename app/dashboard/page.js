@@ -7,6 +7,7 @@ import SiswaTable from "../components/dashboard/SiswaTable";
 import SettingsForm from "../components/dashboard/SettingForm";
 import EditSiswaModal from "../components/dashboard/EditSiswaModal";
 import WhatsAppSettings from "../components/dashboard/WhatsAppSettings";
+import LogMonitor from "../components/dashboard/LogMonitor";
 
 export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState("rekap");
@@ -28,17 +29,21 @@ export default function DashboardPage() {
     const [tglSelesai, setTglSelesai] = useState("");
 
     useEffect(() => {
-        fetchData();
+        const dateNow = new Date().toISOString().split("T")[0];
+        setTglMulai(dateNow);
+        setTglSelesai(dateNow);
+
+        fetchData(dateNow, dateNow);
         fetchSiswa();
         getSettings();
         fetch("/api/whatsapp/status").catch(() => console.log("WA Init fail"));
     }, []);
 
-    const fetchData = async () => {
+    const fetchData = async (start = tglMulai, end = tglSelesai) => {
         setLoading(true);
         try {
             const res = await fetch(
-                `/api/rekap?tglMulai=${tglMulai}&tglSelesai=${tglSelesai}`,
+                `/api/rekap?tglMulai=${start}&tglSelesai=${end}`,
             );
             const result = await res.json();
             setData(result.rows || []);
@@ -155,6 +160,15 @@ export default function DashboardPage() {
         setTimeout(() => setIsDownloading(false), 2000);
     };
 
+    const handleDeleteLogs = async () => {
+        try {
+            const res = await fetch("/api/logs", { method: "DELETE" });
+            if (res.ok) alert("Log berhasil dihapus");
+        } catch (e) {
+            alert("Gagal menghapus log");
+        }
+    };
+
     const filteredData = data.filter((row) =>
         filterKelas === "Semua" ? true : row.kelas === filterKelas,
     );
@@ -181,8 +195,9 @@ export default function DashboardPage() {
                         setTglMulai={setTglMulai}
                         tglSelesai={tglSelesai}
                         setTglSelesai={setTglSelesai}
-                        onFilter={fetchData}
+                        onFilter={() => fetchData(tglMulai, tglSelesai)}
                         onDownload={handleDownloadExcel}
+                        onDeleteLogs={handleDeleteLogs}
                     />
                 )}
 
@@ -204,6 +219,8 @@ export default function DashboardPage() {
                         onDelete={handleDeleteSiswa}
                     />
                 )}
+
+                {activeTab === "log" && <LogMonitor />}
 
                 {activeTab === "settings" && (
                     <div className="space-y-8">

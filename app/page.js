@@ -699,7 +699,7 @@ export default function AbsensiPage() {
     };
 
     // 3. CORE LOGIC: Liveness + Recognition
-    const handleAbsensi = async ({ uid, nama }) => {
+    const handleAbsensi = async ({ uid, nama, token }) => {
         if (isProcessing) return;
         setIsProcessing(true);
 
@@ -836,7 +836,12 @@ export default function AbsensiPage() {
                     playSound("berhasil");
                     await fetch("/api/rfid", {
                         method: "POST",
-                        body: JSON.stringify({ uid, nama, action: "check_in" }),
+                        body: JSON.stringify({
+                            uid,
+                            nama,
+                            token,
+                            action: "check_in",
+                        }),
                     });
                 } else {
                     setStatus("❌ Wajah Tidak Sesuai!");

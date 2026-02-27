@@ -9,6 +9,7 @@ export default function FilterSection({
     setTglSelesai,
     onFilter,
     onDownload,
+    onDeleteLogs,
 }) {
     const safeDaftarKelas = Array.isArray(daftarKelas)
         ? daftarKelas
@@ -19,7 +20,9 @@ export default function FilterSection({
                 <h1 className="text-3xl font-bold text-slate-900">
                     {activeTab === "rekap"
                         ? "Rekapitulasi"
-                        : "Data Master Siswa"}
+                        : activeTab === "siswa"
+                          ? "Data Master Siswa"
+                          : "Log Aktivitas Sistem"}
                 </h1>
                 <p className="text-slate-500">Kelola data {activeTab} siswa</p>
             </div>
@@ -72,22 +75,32 @@ export default function FilterSection({
                 )}
 
                 {/* Tombol Aksi */}
-                <div className="flex gap-2">
-                    <button
-                        onClick={onFilter}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-all"
-                    >
-                        🔍 Filter
-                    </button>
-                    {activeTab === "rekap" && (
+                {activeTab === "rekap" && (
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => onFilter()}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-all"
+                        >
+                            🔍 Filter
+                        </button>
                         <button
                             onClick={onDownload}
                             className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 transition-all flex items-center gap-2"
                         >
                             📥 Excel
                         </button>
-                    )}
-                </div>
+                    </div>
+                )}
+                {activeTab === "log" && (
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => onDeleteLogs()}
+                            className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 transition-all"
+                        >
+                            🗑️ Hapus Log
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

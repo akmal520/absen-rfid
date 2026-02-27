@@ -5,6 +5,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     const menuItems = [
         { id: "rekap", label: "Rekap Absensi", icon: "📋" },
         { id: "siswa", label: "Manajemen Siswa", icon: "👥" },
+        { id: "log", label: "Log Aktivitas", icon: "📝" },
         { id: "settings", label: "Pengaturan", icon: "⚙️" },
     ];
 
